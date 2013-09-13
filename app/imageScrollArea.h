@@ -4,6 +4,8 @@
 #include <QScrollArea>
 #include <QSize>
 #include <QWheelEvent>
+#include <QMouseEvent>
+#include <QPoint>
 
 class ImageScrollArea : public QScrollArea
 {
@@ -17,6 +19,10 @@ class ImageScrollArea : public QScrollArea
     static const int minImageHeight = 50;
     static const int minImageWidth = 50;
 
+    QPoint lastPoint;
+    bool scrolling;
+    void scrollWindow(const QPoint& delta);
+
 public:
     explicit ImageScrollArea(QWidget *parent = 0);
 
@@ -26,7 +32,12 @@ public:
     void setWidget(QWidget *widget);
     void updateScales();
     QSize fitSizeToAspectRatio(const QSize& wsize);
+
+protected:
     void wheelEvent(QWheelEvent *event);
+    void mousePressEvent(QMouseEvent *event);
+    void mouseMoveEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
 
 signals:
 

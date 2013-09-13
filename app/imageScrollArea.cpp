@@ -2,6 +2,7 @@
 
 #include <math.h>
 #include <QtGlobal>
+#include <QScrollBar>
 
 ImageScrollArea::ImageScrollArea(QWidget *parent) :
     QScrollArea(parent) {
@@ -10,6 +11,7 @@ ImageScrollArea::ImageScrollArea(QWidget *parent) :
     scale = 1.0;
     scaleFactor = 1.25;
     mouseZoomFactor = 1.0;
+    scrolling = false;
 }
 
 void ImageScrollArea::zoomIn(const double nSteps) {
@@ -94,4 +96,37 @@ void ImageScrollArea::wheelEvent(QWheelEvent *event) {
     double factor = mouseZoomFactor * event->delta()/360.;
 #endif
     zoomIn(factor);
+}
+
+void ImageScrollArea::scrollWindow(const QPoint &delta) {
+    QScrollBar *vscroll=verticalScrollBar();
+    QScrollBar *hscroll=horizontalScrollBar();
+
+    vscroll->setValue(vscroll->value() + delta.y());
+    hscroll->setValue(hscroll->value() + delta.x());
+}
+
+void ImageScrollArea::mousePressEvent(QMouseEvent *event)
+{
+    if (event->button() == Qt::LeftButton) {
+        lastPoint = event->pos();
+        scrolling = true;
+    }
+}
+
+void ImageScrollArea::mouseMoveEvent(QMouseEvent *event)
+{
+    if ((event->buttons() & Qt::LeftButton) && scrolling) {
+        scrollWindow(lastPoint - event->pos());
+        lastPoint = event->pos();
+    }
+}
+
+void ImageScrollArea::mouseReleaseEvent(QMouseEvent *event)
+{
+    if (event->button() == Qt::LeftButton && scrolling) {
+        scrollWindow(lastPoint - event->pos());
+        lastPoint = event->pos();
+        scrolling = false;
+    }
 }
