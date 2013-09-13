@@ -40,6 +40,7 @@ void ImageScrollArea::fitToWindow() {
     setWidgetResizable(true);
     if(widget())
         widget()->resize(size());
+    scale = 1;
 }
 
 void ImageScrollArea::setWidget(QWidget *widget) {
@@ -133,5 +134,14 @@ void ImageScrollArea::mouseReleaseEvent(QMouseEvent *event)
         scrollWindow(lastPoint - event->pos());
         lastPoint = event->pos();
         scrolling = false;
+    }
+}
+
+void ImageScrollArea::keyPressEvent(QKeyEvent *event) {
+    if(event->key() == Qt::Key_F) {
+        fitToWindow();
+    }
+    else {
+        QScrollArea::keyPressEvent(event);
     }
 }
