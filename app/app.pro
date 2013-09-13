@@ -18,13 +18,15 @@ SOURCES += main.cpp\
     fixedAspectLabel.cpp \
     imageScrollArea.cpp \
     imageWindow.cpp \
-    fileWindow.cpp
+    fileWindow.cpp \
+    lookupTableSelector.cpp
 
 HEADERS  += mainwindow.h \
     fixedAspectLabel.h \
     imageScrollArea.h \
     imageWindow.h \
-    fileWindow.h
+    fileWindow.h \
+    lookupTableSelector.h
 
 
 include(../ncImager.pri)
