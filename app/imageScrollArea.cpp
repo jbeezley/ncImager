@@ -90,12 +90,17 @@ QSize ImageScrollArea::fitSizeToAspectRatio(const QSize &wsize) {
 }
 
 void ImageScrollArea::wheelEvent(QWheelEvent *event) {
+    if(event->modifiers().testFlag(Qt::ControlModifier)) {
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
-    double factor = mouseZoomFactor * event->angleDelta().y()/360.;
+        double factor = mouseZoomFactor * event->angleDelta().y()/360.;
 #else
-    double factor = mouseZoomFactor * event->delta()/360.;
+        double factor = mouseZoomFactor * event->delta()/360.;
 #endif
-    zoomIn(factor);
+        zoomIn(factor);
+    }
+    else {
+        QScrollArea::wheelEvent(event);
+    }
 }
 
 void ImageScrollArea::scrollWindow(const QPoint &delta) {
