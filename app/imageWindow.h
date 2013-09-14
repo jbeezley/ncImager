@@ -52,6 +52,7 @@ class ImageWindow : public QMainWindow
     const LookupTable* _lut;
     LinearNorm<double> _norm;
     string _lutName;
+    const double *data;
 
     int findWidgetIDim(QWidget *widget) const;
     int widget2VarIDim(int iDim) const;

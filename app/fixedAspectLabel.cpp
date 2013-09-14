@@ -9,6 +9,8 @@ FixedAspectLabel::FixedAspectLabel(QWidget *parent) :
     x = 0;
     y = 0;
     buffer = NULL;
+    setMouseTracking(true);
+    setCursor(Qt::CrossCursor);
 }
 
 void FixedAspectLabel::redraw() {
@@ -69,3 +71,18 @@ FixedAspectLabel::~FixedAspectLabel() {
     if(buffer) delete [] buffer;
 }
 
+void FixedAspectLabel::mouseMoveEvent(QMouseEvent *event) {
+    if (!_statusBar || scaledPixmap.isNull()) return;
+    int xp=event->pos().x() - x;
+    int yp=event->pos().y() - y;
+    if (xp >= 0 && yp >=0 &&
+            xp < scaledPixmap.width() &&
+            yp < scaledPixmap.height()) {
+        yp = scaledPixmap.height() - yp - 1;
+        xp = (xp * originalPixmap.width())/scaledPixmap.width();
+        yp = (yp * originalPixmap.height())/scaledPixmap.height();
+        QString status = "< %1 , %2 >";
+        status = status.arg(xp).arg(yp);
+        _statusBar->showMessage(status);
+    }
+}

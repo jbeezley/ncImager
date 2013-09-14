@@ -1,12 +1,12 @@
 #include "imageWindow.h"
-#include "lookupTableSelector.h"
 
-//#include <iostream>
+#include <QStatusBar>
 #include <cassert>
 
 ImageWindow::ImageWindow(const BaseVariable* var, QWidget *parent) :
     QMainWindow(parent), _var(var), _slice(var->shape()) {
 
+    data = NULL;
     mainWidget = new QWidget(this);
     imageBox = new ImageScrollArea(mainWidget);
     imageLabel = new FixedAspectLabel(imageBox);
@@ -37,6 +37,11 @@ ImageWindow::ImageWindow(const BaseVariable* var, QWidget *parent) :
         dlen = var->shape()[vdim];
         createDimensionControl(var->dimName(vdim), dlen, iDim);
     }
+
+    //QStatusBar *statusBar = new QStatusBar(this);
+    //statusBar()->addPermanentWidget(new QLabel);
+    statusBar()->showMessage(QString("derp"));
+    imageLabel->setStatusBar(statusBar());
 
     connect(xButtonGroup,SIGNAL(buttonPressed(int)),
             this, SLOT(setXDim(int)));
@@ -172,6 +177,8 @@ void ImageWindow::update() {
     assert(_slice.isValid());
     const int N = _var->sliceSize(_slice);
     double *vardata = new double [N];
+    //if(data) delete [] data;
+    //data = vardata;
     assert(vardata);
     _var->readSlice(_slice, vardata);
     uint8_t *pixdata = new uint8_t [N];

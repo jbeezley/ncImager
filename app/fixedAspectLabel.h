@@ -5,11 +5,14 @@
 #include <QImage>
 #include <QPixmap>
 #include <QSize>
+#include <QStatusBar>
+#include <QMouseEvent>
 
 class FixedAspectLabel : public QLabel
 {
     Q_OBJECT
 private:
+    QStatusBar *_statusBar;
     QPixmap originalPixmap;
     QPixmap scaledPixmap;
     QImage *image;
@@ -27,6 +30,8 @@ public:
     void paintEvent(QPaintEvent *event);
     QSize sizeHint() const;
     void setMirror(bool horizontal, bool vertical);
+    void setStatusBar(QStatusBar *statusBar) { _statusBar = statusBar; }
+    void mouseMoveEvent(QMouseEvent *event);
 
 signals:
 
