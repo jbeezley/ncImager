@@ -1,6 +1,7 @@
 #include "fixedAspectLabel.h"
 
 #include <QPainter>
+#include <QToolTip>
 #include <cassert>
 
 #pragma GCC diagnostic ignored "-Wunused-parameter"
@@ -91,6 +92,7 @@ void FixedAspectLabel::mouseMoveEvent(QMouseEvent *event) {
     if (xp >= 0 && yp >=0 &&
             xp < scaledPixmap.width() &&
             yp < scaledPixmap.height()) {
+        QToolTip::hideText();
         yp = scaledPixmap.height() - yp - 1;
         xp = (xp * originalPixmap.width())/scaledPixmap.width();
         yp = (yp * originalPixmap.height())/scaledPixmap.height();
@@ -105,5 +107,9 @@ void FixedAspectLabel::mouseMoveEvent(QMouseEvent *event) {
             status = status.arg(xp).arg(yp).arg(varname);
         }
         _statusBar->showMessage(status);
+    }
+    else {
+        QToolTip::showText(event->globalPos(),
+                           tr("Press \"f\" to toggle fit-to-window mode."));
     }
 }

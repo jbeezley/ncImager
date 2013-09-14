@@ -21,6 +21,7 @@ ImageWindow::ImageWindow(const BaseVariable* var, QWidget *parent) :
     layout->addWidget(new QLabel(QString("Y"), mainWidget), 1, _ycheckPos);
 
     lTableBox = new LookupTableSelector();
+    lTableBox->setToolTip(tr("Select a color map."));
     layout->addWidget(lTableBox, 1, _sliderPos);
 
     layout->addWidget(new QPushButton(QString("&Config"), mainWidget), 1, _textPos, 1, 2);
@@ -77,18 +78,23 @@ void ImageWindow::createDimensionControl(const string &dimname, const size_t dle
     slider->setRange(0, dlen-1);
     slider->setValue(0);
     slider->setDisabled(iDim == 0 || iDim == 1);
+    slider->setToolTip(tr("Slide to adjust the index of non-sliced dimension."));
 
     text->setRange(0, dlen-1);
     text->setWrapping(true);
     text->setButtonSymbols(QSpinBox::NoButtons);
     text->setValue(0);
+    text->setToolTip(tr("Enter index of non-sliced dimension."));
 
     reverse->setHidden(iDim != 0 && iDim != 1);
+    reverse->setToolTip(tr("Click here to invert this dimension."));
 
     checkx->setChecked(iDim == 0);
     checky->setDisabled(iDim == 0);
     checky->setChecked(iDim == 1);
     checkx->setDisabled(iDim == 1);
+    checkx->setToolTip(tr("Click here to show this dimension on the horizontal axis."));
+    checky->setToolTip(tr("Click here to show this dimension on the vertical axis."));
 
     layout->addWidget(label,  _headerRows + iDim, _dimLabelPos);
     layout->addWidget(checkx, _headerRows + iDim, _xcheckPos);

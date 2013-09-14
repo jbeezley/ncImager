@@ -18,6 +18,7 @@ FileWindow::FileWindow(QString fileName, QWidget *parent) :
         return;
     }
     variables = new QComboBox(this);
+    variables->setToolTip(tr("Select a variable."));
 
     QWidget* mainWidget = new QWidget(this);
     layout = new QHBoxLayout(mainWidget);
@@ -50,6 +51,7 @@ void FileWindow::openVariable(QString varName) {
     const BaseVariable *var = _file->getVariable(varName.toStdString());
     assert(var);
     ImageWindow* imageWindow=new ImageWindow(var, this);
+    imageWindow->setWindowTitle(_fileName + " : " + varName);
     imageWindow->raise();
     imageWindow->show();
 }
