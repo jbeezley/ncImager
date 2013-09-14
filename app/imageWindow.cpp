@@ -1,4 +1,5 @@
 #include "imageWindow.h"
+#include "lookupTableSelector.h"
 
 //#include <iostream>
 #include <cassert>
@@ -20,6 +21,7 @@ ImageWindow::ImageWindow(const BaseVariable* var, QWidget *parent) :
     layout->addWidget(imageBox, 0, 0, 1, 6);
     layout->addWidget(new QLabel(QString("X"), mainWidget), 1, _xcheckPos);
     layout->addWidget(new QLabel(QString("Y"), mainWidget), 1, _ycheckPos);
+    layout->addWidget(new LookupTableSelector(), 1, _sliderPos);
 
     layout->addWidget(new QPushButton(QString("&Config"), mainWidget), 1, _textPos, 1, 2);
 
@@ -68,6 +70,7 @@ void ImageWindow::createDimensionControl(const string &dimname, const size_t dle
                           QSizePolicy::Fixed);
     slider->setRange(0, dlen-1);
     slider->setValue(0);
+    slider->setDisabled(iDim == 0 || iDim == 1);
 
     text->setRange(0, dlen-1);
     text->setWrapping(true);
