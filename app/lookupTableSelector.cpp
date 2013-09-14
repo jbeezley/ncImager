@@ -6,19 +6,28 @@
 
 using namespace luticon;
 
-QPixmap LutIcon::pixmapFromLut(const LookupTable *lut) {
-    uint8_t A[WIDTH * HEIGHT];
-    for(int i=0; i<HEIGHT; i++) {
-        for(int j=0; j<WIDTH; j++) {
-            A[i*WIDTH + j] = (uint8_t) round( (WIDTH-1)*(((double) j )/(WIDTH-1)) );
+QPixmap LutIcon::pixmapFromLut(const LookupTable *lut, const int w, const int h) {
+    uint8_t *A = new uint8_t [w * h];
+    for(int i=0; i<h; i++) {
+        for(int j=0; j<w; j++) {
+            A[i*w + j] = (uint8_t) round( (WIDTH-1)*(((double) j )/(w-1)) );
+            //std::cout << i*w+j << " " << (int) A[i*w+j] << endl;
         }
     }
-    uint8_t pixelData[WIDTH*HEIGHT*LookupTable::PIXELELEMENTS];
-    lut->makePColor(HEIGHT * WIDTH, A, pixelData);
-    return QPixmap::fromImage(QImage((uchar *) pixelData, WIDTH, HEIGHT, QImage::Format_ARGB32));
+    uint8_t *pixelData = new uint8_t [w*h*LookupTable::PIXELELEMENTS];
+    lut->makePColor(h * w, A, pixelData);
+    delete [] A;
+    return QPixmap::fromImage(QImage((uchar *) pixelData, w, h, QImage::Format_ARGB32));
 }
 
-LutIcon::LutIcon(const LookupTable *lut) : QIcon(LutIcon::pixmapFromLut(lut)) {
+LutIcon::LutIcon(const LookupTable *lut) : QIcon() {
+    //QIcon(LutIcon::pixmapFromLut(lut)) {
+    QPixmap pixmap;
+
+    for(int i=MINWIDTH; i<=MAXWIDTH; i+=8) {
+        pixmap = LutIcon::pixmapFromLut(lut, i, HEIGHT);
+        addPixmap(pixmap);
+    }
 }
 
 bool LookupTableSelector::initialized = false;
@@ -45,13 +54,15 @@ LookupTableSelector::LookupTableSelector(QWidget *parent) :
         loadLookupTables();
     }
     for(unsigned int i = 0; i<luts.size(); i++) {
+        //insertSeparator(2*i+2);
         addItem(*lutIcons[i], QString());
     }
     setIconSize(QSize(LutIcon::WIDTH, LutIcon::HEIGHT));
     setSizeAdjustPolicy(AdjustToContents);
-    setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed);
+    setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     setCurrentIndex(defaultLUTIndex);
-    setMinimumWidth(64);
+    setMinimumWidth(LutIcon::MINWIDTH);
+    setMaximumWidth(LutIcon::MAXWIDTH);
 }
 
 void LookupTableSelector::resizeEvent(QResizeEvent *e) {

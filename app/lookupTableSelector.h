@@ -14,13 +14,15 @@
 namespace luticon {
 
 class LutIcon : public QIcon {
-    static QPixmap pixmapFromLut(const LookupTable* lut);
+    static QPixmap pixmapFromLut(const LookupTable* lut, const int width = WIDTH, const int height = HEIGHT);
 
 public:
     explicit LutIcon(const LookupTable* lut);
 
     static const int WIDTH = LookupTable::LUTROWS;
     static const int HEIGHT = 14;
+    static const int MINWIDTH = 32;
+    static const int MAXWIDTH = WIDTH;
 
 };
 
