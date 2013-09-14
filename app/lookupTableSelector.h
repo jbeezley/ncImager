@@ -35,17 +35,19 @@ class LookupTableSelector : public QComboBox
     static bool initialized;
     static std::map<int, const LookupTable*> luts;
     static std::map<int, const luticon::LutIcon*> lutIcons;
-    static const string defaultLUTName;
-    static int defaultLUTIndex;
 
     static void loadLookupTables();
 
 
 public:
+    static const string defaultLUTName;
+    static int defaultLUTIndex;
+
     explicit LookupTableSelector(QWidget *parent = 0);
     virtual QSize sizeHint() const { return QSize(luticon::LutIcon::WIDTH,
                                     luticon::LutIcon::HEIGHT); }
     void resizeEvent(QResizeEvent *e);
+    const LookupTable* getLUT(const int i) const;
 
 signals:
 

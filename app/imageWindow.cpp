@@ -6,7 +6,6 @@
 
 ImageWindow::ImageWindow(const BaseVariable* var, QWidget *parent) :
     QMainWindow(parent), _var(var), _slice(var->shape()) {
-    setLUT(string("jet"));
 
     mainWidget = new QWidget(this);
     imageBox = new ImageScrollArea(mainWidget);
@@ -21,7 +20,9 @@ ImageWindow::ImageWindow(const BaseVariable* var, QWidget *parent) :
     layout->addWidget(imageBox, 0, 0, 1, 6);
     layout->addWidget(new QLabel(QString("X"), mainWidget), 1, _xcheckPos);
     layout->addWidget(new QLabel(QString("Y"), mainWidget), 1, _ycheckPos);
-    layout->addWidget(new LookupTableSelector(), 1, _sliderPos);
+
+    lTableBox = new LookupTableSelector();
+    layout->addWidget(lTableBox, 1, _sliderPos);
 
     layout->addWidget(new QPushButton(QString("&Config"), mainWidget), 1, _textPos, 1, 2);
 
@@ -43,15 +44,18 @@ ImageWindow::ImageWindow(const BaseVariable* var, QWidget *parent) :
             this, SLOT(setYDim(int)));
     connect(indexMapper, SIGNAL(mapped(QWidget*)),
             this, SLOT(setIndexValue(QWidget*)));
+    connect(lTableBox, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(setLUT(int)));
 
     setCentralWidget(mainWidget);
     mainWidget->setLayout(layout);
+    setLUT(LookupTableSelector::defaultLUTIndex);
     update();
 }
 
-void ImageWindow::setLUT(const string &lutName) {
-    _lutName = lutName;
-    _lut.loadTable(_lutName);
+void ImageWindow::setLUT(int iLUT) {
+    _lut = lTableBox->getLUT(iLUT);
+    update();
 }
 
 void ImageWindow::createDimensionControl(const string &dimname, const size_t dlen, const int iDim) {
@@ -175,9 +179,9 @@ void ImageWindow::update() {
     _norm.setMinMaxValFromArray(N, vardata);
     _norm.normalize(N,vardata,pixdata);
     delete [] vardata;
-    uint8_t *data = new uint8_t [_lut.imageSize(N)];
+    uint8_t *data = new uint8_t [_lut->imageSize(N)];
     assert(data);
-    _lut.makePColor(N,pixdata,data);
+    _lut->makePColor(N,pixdata,data);
     delete [] pixdata;
 
     int width = _var->shape()[_slice.xDim()];

@@ -69,3 +69,7 @@ void LookupTableSelector::resizeEvent(QResizeEvent *e) {
     setIconSize(QSize(size().width(), size().height()));
     QComboBox::resizeEvent(e);
 }
+
+const LookupTable* LookupTableSelector::getLUT(const int i) const {
+    return luts[i];
+}

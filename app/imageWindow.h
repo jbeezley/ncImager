@@ -24,6 +24,7 @@
 
 #include "imageScrollArea.h"
 #include "fixedAspectLabel.h"
+#include "lookupTableSelector.h"
 
 class ImageWindow : public QMainWindow
 {
@@ -44,10 +45,11 @@ class ImageWindow : public QMainWindow
     QButtonGroup *xButtonGroup;
     QButtonGroup *yButtonGroup;
     QSignalMapper *indexMapper;
+    LookupTableSelector *lTableBox;
 
     const BaseVariable* _var;
     BaseVariable::sliceType _slice;
-    LookupTable _lut;
+    const LookupTable* _lut;
     LinearNorm<double> _norm;
     string _lutName;
 
@@ -56,7 +58,7 @@ class ImageWindow : public QMainWindow
 
 public:
     explicit ImageWindow(const BaseVariable* var, QWidget *parent = 0);
-    void setLUT(const string& lutName);
+    //void setLUT(const string& lutName);
     void createDimensionControl(const string& dimname, const size_t dlen, const int iDim);
     void update();
 
@@ -67,6 +69,7 @@ public slots:
     void setYDim(int yDim);
     void setIndexValue(QWidget *widget);
     void setMirroring();
+    void setLUT(int iLUT);
 };
 
 #endif // IMAGEWINDOW_H
