@@ -56,6 +56,8 @@ LookupTableSelector::LookupTableSelector(QWidget *parent) :
     for(unsigned int i = 0; i<luts.size(); i++) {
         //insertSeparator(2*i+2);
         addItem(*lutIcons[i], QString());
+        setItemData(count()-1, QString(LookupTable::getTableName(i)),
+                    Qt::ToolTipRole);
     }
     setIconSize(QSize(LutIcon::WIDTH, LutIcon::HEIGHT));
     setSizeAdjustPolicy(AdjustToContents);
