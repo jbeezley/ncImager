@@ -1,6 +1,7 @@
 #include "fixedAspectLabel.h"
 
 #include <QPainter>
+#include <cassert>
 
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 
@@ -9,6 +10,7 @@ FixedAspectLabel::FixedAspectLabel(QWidget *parent) :
     x = 0;
     y = 0;
     buffer = NULL;
+    dbuffer = NULL;
     setMouseTracking(true);
     setCursor(Qt::CrossCursor);
 }
@@ -50,9 +52,11 @@ QSize FixedAspectLabel::sizeHint() const {
         return QSize(0,0);
 }
 
-void FixedAspectLabel::setImageFromData(uint8_t *data, int width, int height) {
+void FixedAspectLabel::setImageFromData(uint8_t *data, int width, int height, const double *ddata) {
     if(buffer) delete [] buffer;
+    if(dbuffer) delete [] dbuffer;
     buffer = data;
+    dbuffer = ddata;
     image = new QImage((uchar*) buffer, width, height, QImage::Format_ARGB32);
     updateImage();
 }
@@ -71,6 +75,11 @@ FixedAspectLabel::~FixedAspectLabel() {
     if(buffer) delete [] buffer;
 }
 
+double FixedAspectLabel::getDataValue(int i, int j) const {
+    assert(dbuffer);
+    return dbuffer[j*originalPixmap.width() + i];
+}
+
 void FixedAspectLabel::mouseMoveEvent(QMouseEvent *event) {
     if (!_statusBar || scaledPixmap.isNull()) return;
     int xp=event->pos().x() - x;
@@ -81,8 +90,16 @@ void FixedAspectLabel::mouseMoveEvent(QMouseEvent *event) {
         yp = scaledPixmap.height() - yp - 1;
         xp = (xp * originalPixmap.width())/scaledPixmap.width();
         yp = (yp * originalPixmap.height())/scaledPixmap.height();
-        QString status = "< %1 , %2 >";
-        status = status.arg(xp).arg(yp);
+        QString status;
+        if(dbuffer) {
+            double d = getDataValue(xp,yp);
+            status = "< %1, %2 > = %3";
+            status = status.arg(xp).arg(yp).arg(d);
+        }
+        else {
+            status = "< %1 , %2 >";
+            status = status.arg(xp).arg(yp);
+        }
         _statusBar->showMessage(status);
     }
 }

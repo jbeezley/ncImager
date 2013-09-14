@@ -6,7 +6,6 @@
 ImageWindow::ImageWindow(const BaseVariable* var, QWidget *parent) :
     QMainWindow(parent), _var(var), _slice(var->shape()) {
 
-    data = NULL;
     mainWidget = new QWidget(this);
     imageBox = new ImageScrollArea(mainWidget);
     imageLabel = new FixedAspectLabel(imageBox);
@@ -177,24 +176,20 @@ void ImageWindow::update() {
     assert(_slice.isValid());
     const int N = _var->sliceSize(_slice);
     double *vardata = new double [N];
-    //if(data) delete [] data;
-    //data = vardata;
     assert(vardata);
     _var->readSlice(_slice, vardata);
     uint8_t *pixdata = new uint8_t [N];
     assert(pixdata);
     _norm.setMinMaxValFromArray(N, vardata);
     _norm.normalize(N,vardata,pixdata);
-    delete [] vardata;
     uint8_t *data = new uint8_t [_lut->imageSize(N)];
     assert(data);
     _lut->makePColor(N,pixdata,data);
     delete [] pixdata;
-
     int width = _var->shape()[_slice.xDim()];
     int height = _var->shape()[_slice.yDim()];
     assert(width*height == N);
-    imageLabel->setImageFromData(data, width, height);
+    imageLabel->setImageFromData(data, width, height, vardata);
     setMirroring();
     imageBox->fitToWindow();
 }

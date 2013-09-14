@@ -17,15 +17,17 @@ private:
     QPixmap scaledPixmap;
     QImage *image;
     uint8_t *buffer;
+    const double *dbuffer;
     bool mirrorH, mirrorV;
     int x, y;
     void redraw();
+    double getDataValue(int i, int j) const;
 
 public:
     explicit FixedAspectLabel(QWidget *parent = 0);
     ~FixedAspectLabel();
     void setPixmap(const QPixmap& pixmap);
-    void setImageFromData(uint8_t *data, int width, int height);
+    void setImageFromData(uint8_t *data, int width, int height, const double *ddata=NULL);
     void resizeEvent(QResizeEvent *event);
     void paintEvent(QPaintEvent *event);
     QSize sizeHint() const;
