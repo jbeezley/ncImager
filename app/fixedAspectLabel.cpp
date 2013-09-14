@@ -11,6 +11,9 @@ FixedAspectLabel::FixedAspectLabel(QWidget *parent) :
     y = 0;
     buffer = NULL;
     dbuffer = NULL;
+    _coordx = NULL;
+    _coordy = NULL;
+    varname = QString("Variable");
     setMouseTracking(true);
     setCursor(Qt::CrossCursor);
 }
@@ -73,6 +76,7 @@ void FixedAspectLabel::setMirror(bool horizontal, bool vertical) {
 
 FixedAspectLabel::~FixedAspectLabel() {
     if(buffer) delete [] buffer;
+    if(dbuffer) delete [] dbuffer;
 }
 
 double FixedAspectLabel::getDataValue(int i, int j) const {
@@ -93,12 +97,12 @@ void FixedAspectLabel::mouseMoveEvent(QMouseEvent *event) {
         QString status;
         if(dbuffer) {
             double d = getDataValue(xp,yp);
-            status = "< %1, %2 > = %3";
-            status = status.arg(xp).arg(yp).arg(d);
+            status = "%4[ %1, %2 ] = %3";
+            status = status.arg(xp).arg(yp).arg(d).arg(varname);
         }
         else {
-            status = "< %1 , %2 >";
-            status = status.arg(xp).arg(yp);
+            status = "%3[ %1 , %2 ]";
+            status = status.arg(xp).arg(yp).arg(varname);
         }
         _statusBar->showMessage(status);
     }

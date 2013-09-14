@@ -37,10 +37,8 @@ ImageWindow::ImageWindow(const BaseVariable* var, QWidget *parent) :
         createDimensionControl(var->dimName(vdim), dlen, iDim);
     }
 
-    //QStatusBar *statusBar = new QStatusBar(this);
-    //statusBar()->addPermanentWidget(new QLabel);
-    statusBar()->showMessage(QString("derp"));
     imageLabel->setStatusBar(statusBar());
+    imageLabel->setVarName(QString(_var->name().c_str()));
 
     connect(xButtonGroup,SIGNAL(buttonPressed(int)),
             this, SLOT(setXDim(int)));

@@ -18,8 +18,10 @@ private:
     QImage *image;
     uint8_t *buffer;
     const double *dbuffer;
+    const double *_coordx, *_coordy;
     bool mirrorH, mirrorV;
     int x, y;
+    QString varname;
     void redraw();
     double getDataValue(int i, int j) const;
 
@@ -33,7 +35,9 @@ public:
     QSize sizeHint() const;
     void setMirror(bool horizontal, bool vertical);
     void setStatusBar(QStatusBar *statusBar) { _statusBar = statusBar; }
+    void setVarName(const QString& vname) {varname = vname;}
     void mouseMoveEvent(QMouseEvent *event);
+    void setCoordinateArrays(const double *cx, const double *cy) {_coordx = cx; _coordy = cy;}
 
 signals:
 
