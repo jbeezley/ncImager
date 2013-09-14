@@ -10,6 +10,13 @@ int main(int argc, char *argv[])
     MainWindow* mainWindow = new MainWindow;
 
     mainWindow->show();
-    //mainWindow->setHidden(true);
+    if(argc > 1) {
+        FileWindow *fileWindow = mainWindow->openFile(argv[1]);
+        for(int i=2; i<argc; i++) {
+            if(fileWindow) {
+                fileWindow->openVariable(QString(argv[i]));
+            }
+        }
+    }
     return a.exec();
 }

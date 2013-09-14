@@ -21,3 +21,7 @@ void MainWindow::open() {
     if(!fileName.isEmpty())
         new FileWindow(fileName, this);
 }
+
+FileWindow* MainWindow::openFile(const char* fileName ) {
+    return new FileWindow(fileName, this);
+}

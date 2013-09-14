@@ -45,6 +45,7 @@ void FileWindow::populateVariables() {
 }
 
 void FileWindow::openVariable(QString varName) {
+    if(!_file->isOpen()) return;
     //cout << "openVariable  called: " << varName.toStdString() << endl;
     const BaseVariable *var = _file->getVariable(varName.toStdString());
     assert(var);

@@ -17,6 +17,7 @@ class MainWindow : public QMenuBar
 
 public:
     MainWindow(QWidget *parent = 0);
+    FileWindow* openFile(const char* fileName);
 
 private slots:
     void open();
