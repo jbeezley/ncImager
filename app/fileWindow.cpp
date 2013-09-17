@@ -5,13 +5,19 @@
 //#include <iostream>
 #include <cassert>
 
+void FileWindow::openFile(const QString &fileName) {
+    _file = new FileObject(fileName);
+    _file->openFile();
+}
+
 FileWindow::FileWindow(QString fileName, QWidget *parent) :
     QMainWindow(parent), _fileName(fileName)
 {
     this->setAttribute(Qt::WA_DeleteOnClose, true);
-    _file = new NcSliceFile(fileName.toStdString());
+    //_file = new NcSliceFile(fileName.toStdString());
+    openFile(fileName);
 
-    if (!_file->isOpen()) {
+    if (!_file || !_file->isOpen()) {
         QMessageBox::critical(this, tr("ncImager"),
                               QString("Could not open file: ") + fileName);
         this->close();
@@ -48,7 +54,7 @@ void FileWindow::populateVariables() {
 void FileWindow::openVariable(QString varName) {
     if(!_file->isOpen()) return;
     //cout << "openVariable  called: " << varName.toStdString() << endl;
-    const BaseVariable *var = _file->getVariable(varName.toStdString());
+    const BaseVariable *var = _file->getVariable(varName);
     assert(var);
     ImageWindow* imageWindow=new ImageWindow(var, this);
     imageWindow->setWindowTitle(_fileName + " : " + varName);

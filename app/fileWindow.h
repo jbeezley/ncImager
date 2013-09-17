@@ -5,9 +5,11 @@
 #include <QComboBox>
 #include <QHBoxLayout>
 
-#include <ncFileReader.h>
+//#include <ncFileReader.h>
 #include <string>
 
+#include "fileObject.h"
+#include "ncFileReader.h"
 #include "imageWindow.h"
 
 
@@ -15,13 +17,13 @@ class FileWindow : public QMainWindow
 {
     Q_OBJECT
 
-    const NcSliceFile *_file;
+    FileObject *_file;
     const QString _fileName;
     QComboBox *variables;
     QHBoxLayout *layout;
-    //ImageWindow *imageWindow;
 
     void populateVariables();
+    void openFile(const QString& fileName);
 public:
     explicit FileWindow(QString fileName, QWidget *parent = 0);
 

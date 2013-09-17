@@ -11,6 +11,8 @@
 
 #include "lookupTable.h"
 
+using std::string;
+
 namespace luticon {
 
 class LutIcon : public QIcon {

@@ -13,6 +13,7 @@ class MainWindow : public QMenuBar
 {
     Q_OBJECT
     QAction *openAct;
+    QAction *urlAct;
     QMenu *fileMenu;
 
 public:
@@ -20,7 +21,8 @@ public:
     FileWindow* openFile(const char* fileName);
 
 private slots:
-    void open();
+    void openLocal();
+    void openURL();
 };
 
 #endif // MAINWINDOW_H
