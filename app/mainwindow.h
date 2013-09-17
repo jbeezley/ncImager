@@ -9,12 +9,13 @@
 
 #include "fileWindow.h"
 
-class MainWindow : public QMenuBar
+class MainWindow : public QMainWindow
 {
     Q_OBJECT
     QAction *openAct;
     QAction *urlAct;
     QMenu *fileMenu;
+    QMenuBar *menuBar;
 
 public:
     MainWindow(QWidget *parent = 0);

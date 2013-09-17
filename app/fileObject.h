@@ -14,16 +14,21 @@ public:
     explicit FileObject(const QString& fileName, QObject *parent = 0) :
         QObject(parent), _fileName(fileName), _file(NULL) {}
 
-    bool openFile() { _file = new NcSliceFile(_fileName.toStdString());
-                      return isOpen(); }
-    bool isOpen() const { return _file != NULL && _file->isOpen(); }
-    NcSliceFile::variableMapType variables() const { return _file->variables(); }
-    const BaseVariable *getVariable(const QString& varName) const { return _file->getVariable(varName.toStdString()); }
-
-
+    void openFile() { _file = new NcSliceFile(_fileName.toStdString()); }
 signals:
+    void fileOpenFinished(NcSliceFile*);
+    void finished();
 
 public slots:
+    void openFileSlot() {
+        openFile();
+        emit fileOpenFinished(_file);
+    }
+    void outputSlot() {
+        bool test = true;
+        bool test1=test;
+    }
+
 
 };
 

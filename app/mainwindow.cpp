@@ -5,8 +5,10 @@
 #include <QLineEdit>
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMenuBar(parent)
+    : QMainWindow(parent)
 {
+    menuBar = new QMenuBar(this);
+
     openAct = new QAction(tr("&Open..."), this);
     openAct->setShortcut(tr("Ctrl+O"));
     connect(openAct, SIGNAL(triggered()), this, SLOT(openLocal()));
@@ -19,7 +21,8 @@ MainWindow::MainWindow(QWidget *parent)
     fileMenu->addAction(openAct);
     fileMenu->addAction(urlAct);
 
-    this->addMenu(fileMenu);
+    menuBar->addMenu(fileMenu);
+
 }
 
 void MainWindow::openLocal() {
