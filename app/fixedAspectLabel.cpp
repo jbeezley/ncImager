@@ -87,6 +87,10 @@ double FixedAspectLabel::getDataValue(int i, int j) const {
 }
 
 void FixedAspectLabel::mouseMoveEvent(QMouseEvent *event) {
+    if(event->buttons() != Qt::NoButton) {
+        event->setAccepted(false);
+        return;
+    }
     if (!_statusBar || scaledPixmap.isNull()) return;
     int xp=event->pos().x() - x;
     int yp=event->pos().y() - y;
