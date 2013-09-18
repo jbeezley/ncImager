@@ -1,6 +1,8 @@
 #ifndef FIXEDASPECTLABEL_H
 #define FIXEDASPECTLABEL_H
 
+#include "common.h"
+
 #include <QLabel>
 #include <QImage>
 #include <QPixmap>

@@ -1,6 +1,8 @@
 #ifndef IMAGESCROLLAREA_H
 #define IMAGESCROLLAREA_H
 
+#include "common.h"
+
 #include <QScrollArea>
 #include <QSize>
 #include <QWheelEvent>

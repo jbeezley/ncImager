@@ -1,6 +1,8 @@
 #ifndef NCIMAGERSETTINGS_H
 #define NCIMAGERSETTINGS_H
 
+#include "common.h"
+
 #include <QSettings>
 
 class NcImagerSettings : public QSettings

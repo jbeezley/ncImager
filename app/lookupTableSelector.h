@@ -1,6 +1,8 @@
 #ifndef LOOKUPTABLESELECTOR_H
 #define LOOKUPTABLESELECTOR_H
 
+#include "common.h"
+
 #include <QComboBox>
 #include <QPixmap>
 #include <QIcon>

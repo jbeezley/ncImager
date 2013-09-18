@@ -1,6 +1,8 @@
 #ifndef FILEOBJECT_H
 #define FILEOBJECT_H
 
+#include "common.h"
+
 #include <QObject>
 #include <QStringList>
 #include <QMessageBox>

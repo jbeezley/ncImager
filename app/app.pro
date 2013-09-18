@@ -30,7 +30,8 @@ HEADERS  += mainwindow.h \
     fileWindow.h \
     lookupTableSelector.h \
     ncImagerSettings.h \
-    fileObject.h
+    fileObject.h \
+    common.h
 
 
 include(../ncImager.pri)

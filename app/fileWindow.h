@@ -1,6 +1,8 @@
 #ifndef FILEWINDOW_H
 #define FILEWINDOW_H
 
+#include "common.h"
+
 #include <QMainWindow>
 #include <QComboBox>
 #include <QHBoxLayout>

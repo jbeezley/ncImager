@@ -1,6 +1,8 @@
 #ifndef IMAGEWINDOW_H
 #define IMAGEWINDOW_H
 
+#include "common.h"
+
 #include <QMainWindow>
 #include <QWidget>
 #include <QGridLayout>
