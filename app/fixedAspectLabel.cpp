@@ -2,6 +2,7 @@
 
 #include <QPainter>
 #include <QToolTip>
+#include <QKeySequence>
 #include <cassert>
 
 #pragma GCC diagnostic ignored "-Wunused-parameter"
@@ -109,7 +110,11 @@ void FixedAspectLabel::mouseMoveEvent(QMouseEvent *event) {
         _statusBar->showMessage(status);
     }
     else {
+        QKeySequence ctrl(Qt::ControlModifier);
         QToolTip::showText(event->globalPos(),
-                           tr("Press \"f\" to enable fit-to-window mode."));
+                           tr("<p>Press \"f\" to enable fit-to-window mode.  ")+
+                           tr("Use the mouse wheel while holding ") +
+                           ctrl.toString(QKeySequence::NativeText) +
+                           tr(" to zoom in and out.</p>"));
     }
 }

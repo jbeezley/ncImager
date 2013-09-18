@@ -19,7 +19,7 @@ FileWindow::FileWindow(QString fileName, QWidget *parent) :
     this->setWindowTitle(fileName);
 
     variables = new QComboBox(this);
-    variables->setToolTip(tr("Select a variable to view."));
+    variables->setToolTip(tr("<p>Select a variable to view.</p>"));
 
     QWidget* mainWidget = new QWidget(this);
     layout = new QHBoxLayout(mainWidget);
