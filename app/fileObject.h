@@ -14,6 +14,7 @@ class FileObject : public QObject
     const QString _fileName;
     NcSliceFile *_file;
     QStringList *varList;
+    const QString _openvarmessage;
 
     bool checkFileOpen() {
         if (!_file || !_file->isOpen()) {
@@ -35,6 +36,7 @@ class FileObject : public QObject
     void populateVarList() {
         if(varList) return;
         varList = new QStringList;
+        varList->append(_openvarmessage);
         if(!checkFileOpen()) return;
         NcSliceFile::variableMapType vmap = _file->variables();
         for(NcSliceFile::variableMapType::const_iterator it=vmap.begin(); it != vmap.end(); it++) {
@@ -45,11 +47,11 @@ class FileObject : public QObject
 
 public:
     explicit FileObject(const QString& fileName, QObject *parent = 0) :
-        QObject(parent), _fileName(fileName), _file(NULL), varList(NULL) {}
+        QObject(parent), _fileName(fileName), _file(NULL), varList(NULL),
+        _openvarmessage("Select a variable:"){}
 
 
 signals:
-    //void fileOpenFinished(NcSliceFile*);
 
     void variableList(QStringList); //
     void variableOpened(const BaseVariable*);
@@ -57,14 +59,9 @@ signals:
     void finished();
 
 public slots:
-    /*
-    void openFileSlot() {
-        openFile();
-        emit fileOpenFinished(_file);
-    }
-    */
-    void openVariable(QString varName) {
 
+    void openVariable(QString varName) {
+        if(varName == _openvarmessage) return;
         emit variableOpened(_file->getVariable(varName.toStdString()));
     }
 

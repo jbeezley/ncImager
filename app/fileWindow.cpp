@@ -1,6 +1,7 @@
 #include "fileWindow.h"
 
 #include <QMessageBox>
+#include <QProgressBar>
 
 #include <iostream>
 #include <cassert>
@@ -18,7 +19,7 @@ FileWindow::FileWindow(QString fileName, QWidget *parent) :
     this->setWindowTitle(fileName);
 
     variables = new QComboBox(this);
-    variables->setToolTip(tr("Select a variable."));
+    variables->setToolTip(tr("Select a variable to view."));
 
     QWidget* mainWidget = new QWidget(this);
     layout = new QHBoxLayout(mainWidget);
@@ -44,13 +45,15 @@ FileWindow::FileWindow(QString fileName, QWidget *parent) :
     openDialog = new QProgressDialog(tr("Opening ") + fileName,
                                      tr("Cancel"), 0, 1, this);
     openDialog->setWindowModality(Qt::WindowModal);
+    QProgressBar *bar = new QProgressBar(openDialog);
+    bar->setVisible(false);
+    openDialog->setBar(bar);
+    openDialog->setValue(0);
 
     connect(openDialog, SIGNAL(canceled()), this, SLOT(cancelOpen()));
     connect(fileObj, SIGNAL(fileOpened(bool)), openDialog, SLOT(accept()));
     connect(fthread,SIGNAL(finished()), fileObj, SLOT(closeFile()));
 
-    openDialog->raise();
-    openDialog->show();
     fthread->start();
     openDialog->exec();
 
@@ -75,16 +78,16 @@ void FileWindow::fileOpened(bool opened) {
 }
 
 void FileWindow::populateVariables(QStringList vlist) {
+    // In case this method is called twice for some reason...
+    fileObj->disconnect(SIGNAL(variableOpened(const BaseVariable*)));
+    this->disconnect(SIGNAL(_requestOpenVariable(QString)));
+    variables->disconnect();
     variables->clear();
-    /*
-    NcSliceFile::variableMapType vmap = _file->variables();
-    for(NcSliceFile::variableMapType::const_iterator it=vmap.begin(); it != vmap.end(); it++) {
-        std::string varname = it->first;
-        variables->addItem(QString(varname.c_str()));
-    }
-    */
+
+    //variables->addItem(QString(""));
     variables->addItems(vlist);
-    connect(variables, SIGNAL(currentIndexChanged(QString)),
+    variables->setCurrentIndex(0);
+    connect(variables, SIGNAL(activated(QString)),
             fileObj, SLOT(openVariable(QString)));
     connect(this, SIGNAL(_requestOpenVariable(QString)),
             fileObj, SLOT(openVariable(QString)));
@@ -93,9 +96,12 @@ void FileWindow::populateVariables(QStringList vlist) {
 }
 
 void FileWindow::openVariable(const BaseVariable* var) {
-
-    //const BaseVariable *var = _file->getVariable(varName.toStdString());
-    assert(var);
+    variables->setCurrentIndex(0);
+    if(!var) {
+        QMessageBox::critical(this, tr("File Window"),
+                              tr("Could not open variable."));
+        return;
+    }
     ImageWindow* imageWindow=new ImageWindow(var, this);
     imageWindow->setWindowTitle(_fileName + " : " + var->name().c_str());
     imageWindow->raise();
@@ -111,4 +117,11 @@ void FileWindow::cancelOpen() {
 
 void FileWindow::requestOpenVariable(QString varname) {
     emit _requestOpenVariable(varname);
+}
+
+void FileWindow::keyPressEvent(QKeyEvent *event) {
+    if(event->key() == Qt::Key_W && event->modifiers().testFlag(Qt::ControlModifier))
+        close();
+    else
+        QMainWindow::keyPressEvent(event);
 }

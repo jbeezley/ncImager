@@ -110,6 +110,6 @@ void FixedAspectLabel::mouseMoveEvent(QMouseEvent *event) {
     }
     else {
         QToolTip::showText(event->globalPos(),
-                           tr("Press \"f\" to toggle fit-to-window mode."));
+                           tr("Press \"f\" to enable fit-to-window mode."));
     }
 }

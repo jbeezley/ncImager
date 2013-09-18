@@ -71,6 +71,9 @@ public slots:
     void setIndexValue(QWidget *widget);
     void setMirroring();
     void setLUT(int iLUT);
+
+protected:
+    void keyPressEvent(QKeyEvent *);
 };
 
 #endif // IMAGEWINDOW_H

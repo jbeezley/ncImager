@@ -210,3 +210,10 @@ void ImageWindow::setMirroring() {
     bool mirrorV = reverseY->isChecked();
     imageLabel->setMirror(mirrorH, mirrorV);
 }
+
+void ImageWindow::keyPressEvent(QKeyEvent *event) {
+    if(event->key() == Qt::Key_W && event->modifiers().testFlag(Qt::ControlModifier))
+        close();
+    else
+        QMainWindow::keyPressEvent(event);
+}

@@ -36,6 +36,9 @@ public:
     ~FileWindow();
     void requestOpenVariable(QString varname);
 
+protected:
+    void keyPressEvent(QKeyEvent *);
+
 signals:
     //void filePointerReceived();
     void _requestOpenVariable(const QString& varname);
