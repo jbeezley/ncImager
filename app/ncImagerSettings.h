@@ -15,4 +15,12 @@ public slots:
 
 };
 
+class ImageWindowSettings : public NcImagerSettings
+{
+    Q_OBJECT
+public:
+    explicit ImageWindowSettings(QObject *parent = 0);
+
+};
+
 #endif // NCIMAGERSETTINGS_H

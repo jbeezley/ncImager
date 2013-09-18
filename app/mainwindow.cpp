@@ -47,5 +47,5 @@ void MainWindow::openURL() {
                             QString(),
                             &ok);
 
-    if(ok and !url.isEmpty()) new FileWindow(url, this);
+    if(ok and !url.isEmpty()) new FileWindow(QString("[cache=1][noprefetch][wholevar]") + url, this);
 }
