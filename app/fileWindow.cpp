@@ -66,8 +66,17 @@ FileWindow::~FileWindow() {
     }
 }
 
-void FileWindow::closeEvent(QCloseEvent *) {
-    closeAllVariables();
+void FileWindow::closeEvent(QCloseEvent *event) {
+    if(openVariableWindows.isEmpty() ||
+        (QMessageBox::question(this, tr("Close File?"),
+                                 tr("<p>There are variable windows open.  Are you sure you want to close the file?</p>"),
+                               QMessageBox::No | QMessageBox::Yes)
+                == QMessageBox::Yes) ) {
+        closeAllVariables();
+        event->accept();
+    }
+    else
+        event->ignore();
 }
 
 void FileWindow::fileOpened(bool opened) {
