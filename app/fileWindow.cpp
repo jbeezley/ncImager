@@ -13,7 +13,6 @@ void FileWindow::openFile(const QString &fileName) {
 FileWindow::FileWindow(QString fileName, QWidget *parent) :
     QMainWindow(parent), _fileName(fileName)
 {
-
     this->setAttribute(Qt::WA_DeleteOnClose, true);
     //_file = new NcSliceFile(fileName.toStdString());
     this->setWindowTitle(fileName);
@@ -57,12 +56,18 @@ FileWindow::FileWindow(QString fileName, QWidget *parent) :
     fthread->start();
     openDialog->exec();
 
+    connect(this, SIGNAL(destroyed()), this, SLOT(closeAllVariables()));
+
 }
 
 FileWindow::~FileWindow() {
     if (fthread && fthread->isRunning()) {
         fthread->exit();
     }
+}
+
+void FileWindow::closeEvent(QCloseEvent *) {
+    closeAllVariables();
 }
 
 void FileWindow::fileOpened(bool opened) {
@@ -102,7 +107,8 @@ void FileWindow::openVariable(const BaseVariable* var) {
                               tr("Could not open variable."));
         return;
     }
-    ImageWindow* imageWindow=new ImageWindow(var, this);
+    ImageWindow* imageWindow=new ImageWindow(var);
+    openVariableWindows.insert(imageWindow);
     imageWindow->setWindowTitle(_fileName + " : " + var->name().c_str());
     imageWindow->raise();
     imageWindow->show();
@@ -113,6 +119,14 @@ void FileWindow::cancelOpen() {
     fthread->terminate();
     //fthread->wait();
     this->close();
+}
+
+void FileWindow::closeAllVariables()
+{
+    QSetIterator<QMainWindow*> it(openVariableWindows);
+    while(it.hasNext()) {
+        it.next()->close();
+    }
 }
 
 void FileWindow::requestOpenVariable(QString varname) {

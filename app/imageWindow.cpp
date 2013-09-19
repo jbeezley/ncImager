@@ -6,6 +6,9 @@
 ImageWindow::ImageWindow(const BaseVariable* var, QWidget *parent) :
     QMainWindow(parent), _var(var), _slice(var->shape()) {
 
+    nDims = var->nDims();
+    imgSettings = new ImageWindowSettings;
+
     mainWidget = new QWidget(this);
     imageBox = new ImageScrollArea(mainWidget);
     imageLabel = new FixedAspectLabel(imageBox);
@@ -24,7 +27,8 @@ ImageWindow::ImageWindow(const BaseVariable* var, QWidget *parent) :
     lTableBox->setToolTip(tr("<p>Select a color map.</p>"));
     layout->addWidget(lTableBox, 1, _sliderPos);
 
-    layout->addWidget(new QPushButton(QString("&Config"), mainWidget), 1, _textPos, 1, 2);
+    QPushButton *config = new QPushButton(QString("&Config"), mainWidget);
+    layout->addWidget(config, 1, _textPos, 1, 2);
 
     xButtonGroup = new QButtonGroup(mainWidget);
     yButtonGroup = new QButtonGroup(mainWidget);
@@ -49,16 +53,33 @@ ImageWindow::ImageWindow(const BaseVariable* var, QWidget *parent) :
             this, SLOT(setIndexValue(QWidget*)));
     connect(lTableBox, SIGNAL(currentIndexChanged(int)),
             this, SLOT(setLUT(int)));
+    connect(config, SIGNAL(clicked()), this, SLOT(openSettings()));
+
+    _slice.setXDim(widget2VarIDim(imgSettings->xDim(nDims)));
+    _slice.setYDim(widget2VarIDim(imgSettings->yDim(nDims)));
 
     setCentralWidget(mainWidget);
     mainWidget->setLayout(layout);
     setLUT(LookupTableSelector::defaultLUTIndex);
     update();
+    setMirroring();
 }
 
 void ImageWindow::setLUT(int iLUT) {
     _lut = lTableBox->getLUT(iLUT);
     update();
+}
+
+void ImageWindow::openSettings()
+{
+    QMainWindow *window = new QMainWindow(this);
+    window->setWindowModality(Qt::WindowModal);
+    ImageSettingsWidget *widget = new ImageSettingsWidget(window);
+    window->setCentralWidget(widget);
+    connect(widget, SIGNAL(applied()), this, SLOT(update()));
+    connect(widget, SIGNAL(destroyed()), window, SLOT(deleteLater()));
+    window->raise();
+    window->show();
 }
 
 void ImageWindow::createDimensionControl(const string &dimname, const size_t dlen, const int iDim) {
@@ -77,7 +98,7 @@ void ImageWindow::createDimensionControl(const string &dimname, const size_t dle
                           QSizePolicy::Fixed);
     slider->setRange(0, dlen-1);
     slider->setValue(0);
-    slider->setDisabled(iDim == 0 || iDim == 1);
+    slider->setDisabled(iDim == imgSettings->xDim(nDims) || iDim == imgSettings->yDim(nDims));
     slider->setToolTip(tr("<p>Slide to adjust the index of non-sliced dimension.</p>"));
 
     text->setRange(0, dlen-1);
@@ -86,13 +107,18 @@ void ImageWindow::createDimensionControl(const string &dimname, const size_t dle
     text->setValue(0);
     text->setToolTip(tr("<p>Enter index of non-sliced dimension.</p>"));
 
-    reverse->setHidden(iDim != 0 && iDim != 1);
+    reverse->setHidden(iDim != imgSettings->xDim(nDims) && iDim != imgSettings->yDim(nDims));
     reverse->setToolTip(tr("<p>Click here to invert this dimension.</p>"));
 
-    checkx->setChecked(iDim == 0);
-    checky->setDisabled(iDim == 0);
-    checky->setChecked(iDim == 1);
-    checkx->setDisabled(iDim == 1);
+    if(iDim == imgSettings->xDim(nDims) && imgSettings->rxDim())
+        reverse->toggle();
+    if(iDim == imgSettings->yDim(nDims) && imgSettings->ryDim())
+        reverse->toggle();
+
+    checkx->setChecked(iDim == imgSettings->xDim(nDims));
+    checky->setDisabled(iDim == imgSettings->xDim(nDims));
+    checky->setChecked(iDim == imgSettings->yDim(nDims));
+    checkx->setDisabled(iDim == imgSettings->yDim(nDims));
     checkx->setToolTip(tr("<p>Click here to show this dimension on the horizontal axis.</p>"));
     checky->setToolTip(tr("<p>Click here to show this dimension on the vertical axis.</p>"));
 

@@ -21,7 +21,8 @@ SOURCES += main.cpp\
     fileWindow.cpp \
     lookupTableSelector.cpp \
     ncImagerSettings.cpp \
-    fileObject.cpp
+    fileObject.cpp \
+    imageSettingsWidget.cpp
 
 HEADERS  += mainwindow.h \
     fixedAspectLabel.h \
@@ -31,7 +32,8 @@ HEADERS  += mainwindow.h \
     lookupTableSelector.h \
     ncImagerSettings.h \
     fileObject.h \
-    common.h
+    common.h \
+    imageSettingsWidget.h
 
 
 include(../ncImager.pri)

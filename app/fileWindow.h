@@ -10,6 +10,7 @@
 #include <QProgressDialog>
 #include <QList>
 #include <QStringList>
+#include <QSet>
 
 #include <ncFileReader.h>
 #include <string>
@@ -31,6 +32,7 @@ class FileWindow : public QMainWindow
     QProgressDialog *openDialog;
     QList<QString> queuedVariables;
     FileObject *fileObj;
+    QSet<QMainWindow*> openVariableWindows;
 
     //void openFile(const QString& fileName);
 public:
@@ -38,6 +40,7 @@ public:
     ~FileWindow();
     void requestOpenVariable(QString varname);
 
+    void closeEvent(QCloseEvent *);
 protected:
     void keyPressEvent(QKeyEvent *);
 
@@ -49,7 +52,8 @@ public slots:
     void fileOpened(bool opened);
     void openVariable(const BaseVariable* var);
     void cancelOpen();
-    //void openFile();
+    void closeAllVariables();
+
 protected slots:
     void populateVariables(QStringList);
 };
