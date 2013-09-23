@@ -15,6 +15,7 @@ ImageWindow::ImageWindow(const BaseVariable* var, QWidget *parent) :
     imageBox = new ImageScrollArea(mainWidget);
     imageLabel = new FixedAspectLabel(imageBox);
     imageBox->setWidget(imageLabel);
+    imageBox->setDefaultSize(QSize(imgSettings->iWidth(),imgSettings->iHeight()));
 
     layout = new QGridLayout(mainWidget);
     layout->setContentsMargins(5,5,5,5);

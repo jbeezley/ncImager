@@ -1,4 +1,5 @@
 #include "imageScrollArea.h"
+#include "fixedAspectLabel.h"
 
 #include <math.h>
 #include <QtGlobal>
@@ -13,6 +14,7 @@ ImageScrollArea::ImageScrollArea(QWidget *parent) :
     scaleFactor = 1.25;
     mouseZoomFactor = 1.0;
     scrolling = false;
+    defaultSize = QSize(0,0);
 }
 
 void ImageScrollArea::zoomIn(const double nSteps) {
@@ -93,6 +95,19 @@ QSize ImageScrollArea::fitSizeToAspectRatio(const QSize &wsize) const {
     //qDebug() << "new " << QSize(w,h);
     return QSize(w,h);
 }
+
+void ImageScrollArea::setDefaultSize(const QSize &size)
+{
+    defaultSize = fitSizeToAspectRatio(size);
+    static_cast<FixedAspectLabel*>(widget())->setDefaultSize(size);
+}
+
+/*
+QSize ImageScrollArea::sizeHint() const
+{
+    return defaultSize;
+}
+*/
 
 void ImageScrollArea::wheelEvent(QWheelEvent *event) {
     if(event->modifiers().testFlag(Qt::ControlModifier)) {

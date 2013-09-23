@@ -5,6 +5,8 @@
 #include <QKeySequence>
 #include <cassert>
 
+#include <QDebug>
+
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 
 FixedAspectLabel::FixedAspectLabel(QWidget *parent) :
@@ -18,6 +20,7 @@ FixedAspectLabel::FixedAspectLabel(QWidget *parent) :
     varname = QString("Variable");
     setMouseTracking(true);
     setCursor(Qt::CrossCursor);
+    defaultSize = NULL;
 }
 
 void FixedAspectLabel::redraw() {
@@ -51,6 +54,7 @@ void FixedAspectLabel::paintEvent(QPaintEvent *event) {
 }
 
 QSize FixedAspectLabel::sizeHint() const {
+    if(defaultSize) return *defaultSize;
     if(!originalPixmap.isNull())
         return originalPixmap.size();
     else
@@ -121,4 +125,9 @@ void FixedAspectLabel::mouseMoveEvent(QMouseEvent *event) {
                            ctrl.toString(QKeySequence::NativeText) +
                            tr(" to zoom in and out.</p>"));
     }
+}
+
+void FixedAspectLabel::setDefaultSize(const QSize &size)
+{
+    defaultSize = new QSize(size);
 }

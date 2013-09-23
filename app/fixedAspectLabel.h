@@ -24,6 +24,7 @@ private:
     bool mirrorH, mirrorV;
     int x, y;
     QString varname;
+    QSize *defaultSize;
     void redraw();
     double getDataValue(int i, int j) const;
 
@@ -40,6 +41,7 @@ public:
     void setVarName(const QString& vname) {varname = vname;}
     void mouseMoveEvent(QMouseEvent *event);
     void setCoordinateArrays(const double *cx, const double *cy) {_coordx = cx; _coordy = cy;}
+    void setDefaultSize(const QSize& size);
 
 signals:
 
