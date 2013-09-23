@@ -2,6 +2,7 @@
 
 #include <QMessageBox>
 #include <QProgressBar>
+#include <QDebug>
 
 #include <iostream>
 #include <cassert>
@@ -118,9 +119,16 @@ void FileWindow::openVariable(const BaseVariable* var) {
     }
     ImageWindow* imageWindow=new ImageWindow(var);
     openVariableWindows.insert(imageWindow);
+    connect(imageWindow, SIGNAL(closeWindow(QMainWindow*)),
+            this, SLOT(closeVariable(QMainWindow*)));
     imageWindow->setWindowTitle(_fileName + " : " + var->name().c_str());
     imageWindow->raise();
     imageWindow->show();
+}
+
+void FileWindow::closeVariable(QMainWindow *var)
+{
+    openVariableWindows.remove(var);
 }
 
 void FileWindow::cancelOpen() {

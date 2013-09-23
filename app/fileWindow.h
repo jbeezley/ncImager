@@ -50,7 +50,8 @@ signals:
 
 public slots:
     void fileOpened(bool opened);
-    void openVariable(const BaseVariable* var);
+    void openVariable(const BaseVariable*);
+    void closeVariable(QMainWindow*);
     void cancelOpen();
     void closeAllVariables();
 
