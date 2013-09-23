@@ -34,7 +34,7 @@ public:
     void fitToWindow();
     void setWidget(QWidget *widget);
     void updateScales();
-    QSize fitSizeToAspectRatio(const QSize& wsize);
+    QSize fitSizeToAspectRatio(const QSize& wsize) const;
 
 protected:
     void wheelEvent(QWheelEvent *event);

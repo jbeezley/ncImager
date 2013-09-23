@@ -41,8 +41,8 @@ void ImageSettingsWidget::createControls()
 
     xdimBox->setRange(-5,5);
     ydimBox->setRange(-5,5);
-    imageWidth->setRange(30,999);
-    imageHeight->setRange(30,999);
+    imageWidth->setRange(30,9999);
+    imageHeight->setRange(30,9999);
 
     xdimBox->setValue(settings->xDim());
     ydimBox->setValue(settings->yDim());
@@ -68,6 +68,13 @@ void ImageSettingsWidget::createControls()
 
     layout->addWidget(cancelButton,4,0);
     layout->addWidget(applyButton,4,1);
+
+    connect(xdimBox, SIGNAL(valueChanged(int)), settings, SLOT(setXDim(int)));
+    connect(ydimBox, SIGNAL(valueChanged(int)), settings, SLOT(setYDim(int)));
+    connect(xreverse, SIGNAL(toggled(bool)), settings, SLOT(setRxDim(bool)));
+    connect(yreverse, SIGNAL(toggled(bool)), settings, SLOT(setRyDim(bool)));
+    connect(imageWidth, SIGNAL(valueChanged(int)), settings, SLOT(setIWidth(int)));
+    connect(imageHeight, SIGNAL(valueChanged(int)), settings, SLOT(setIHeight(int)));
 
     connect(cancelButton, SIGNAL(clicked()), this, SLOT(cancel()));
     connect(applyButton, SIGNAL(clicked()), this, SLOT(apply()));

@@ -1,19 +1,22 @@
 #include "ncImagerSettings.h"
 
+#include <QDebug>
+
 NcImagerSettings::NcImagerSettings(QObject *parent) :
     QObject(parent)
 {
     _settingsObj = new QSettings("beeztree", "ncImager", this);
+    readDefaults();
 }
 
 void NcImagerSettings::readDefaults()
 {
-
+    settingsObj()->sync();
 }
 
 void NcImagerSettings::writeDefaults() const
 {
-
+    settingsObj()->sync();
 }
 
 ImageWindowSettings::ImageWindowSettings(QObject *parent) :

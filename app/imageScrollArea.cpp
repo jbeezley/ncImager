@@ -3,6 +3,7 @@
 #include <math.h>
 #include <QtGlobal>
 #include <QScrollBar>
+#include <QDebug>
 
 ImageScrollArea::ImageScrollArea(QWidget *parent) :
     QScrollArea(parent) {
@@ -15,6 +16,7 @@ ImageScrollArea::ImageScrollArea(QWidget *parent) :
 }
 
 void ImageScrollArea::zoomIn(const double nSteps) {
+    setWidgetResizable(false);
     updateScales();
     setWidgetResizable(false);
     double temp = scale * pow(scaleFactor, nSteps);
@@ -68,8 +70,8 @@ void ImageScrollArea::updateScales() {
     }
 }
 
-QSize ImageScrollArea::fitSizeToAspectRatio(const QSize &wsize) {
-    setWidgetResizable(false);
+QSize ImageScrollArea::fitSizeToAspectRatio(const QSize &wsize) const {
+    //setWidgetResizable(false);
     if(!widget()) return size();
     QSize isize(widget()->sizeHint());
     double iw = isize.width();
@@ -87,6 +89,8 @@ QSize ImageScrollArea::fitSizeToAspectRatio(const QSize &wsize) {
         w = round(wh * iw / ih);
         h = wh;
     }
+    //qDebug() << "original " << wsize;
+    //qDebug() << "new " << QSize(w,h);
     return QSize(w,h);
 }
 

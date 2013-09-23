@@ -49,6 +49,12 @@ public:
 public slots:
     virtual void readDefaults();
     virtual void writeDefaults() const;
+    void setXDim(int val) {_xDim=val;}
+    void setYDim(int val) {_yDim=val;}
+    void setRxDim(bool val) {_rxDim=val;}
+    void setRyDim(bool val) {_ryDim=val;}
+    void setIWidth(int val) {_iWidth=val;}
+    void setIHeight(int val) {_iHeight=val;}
 
 };
 

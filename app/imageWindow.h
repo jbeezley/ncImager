@@ -68,8 +68,10 @@ public:
     //void setLUT(const string& lutName);
     void createDimensionControl(const string& dimname, const size_t dlen, const int iDim);
     void update();
+    void closeEvent(QCloseEvent *);
 
 signals:
+    void closeWindow(QMainWindow*);
 
 public slots:
     void setXDim(int xDim);

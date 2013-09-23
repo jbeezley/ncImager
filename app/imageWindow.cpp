@@ -2,12 +2,14 @@
 
 #include <QStatusBar>
 #include <cassert>
+#include <QDebug>
 
 ImageWindow::ImageWindow(const BaseVariable* var, QWidget *parent) :
     QMainWindow(parent), _var(var), _slice(var->shape()) {
 
     nDims = var->nDims();
     imgSettings = new ImageWindowSettings;
+    imgSettings->readDefaults();
 
     mainWidget = new QWidget(this);
     imageBox = new ImageScrollArea(mainWidget);
@@ -222,6 +224,11 @@ void ImageWindow::update() {
     imageLabel->setImageFromData(data, width, height, vardata);
     setMirroring();
     imageBox->fitToWindow();
+}
+
+void ImageWindow::closeEvent(QCloseEvent *)
+{
+    emit closeWindow(this);
 }
 
 void ImageWindow::setMirroring() {
